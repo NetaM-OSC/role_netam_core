@@ -1,5 +1,6 @@
 ---
-- block:
+- name: install and build rbenv
+  block:
     - name: rbenv_install | clone rbenv for netam user
       git:
         repo: https://github.com/rbenv/rbenv.git
@@ -25,9 +26,8 @@
         chdir: '{{ v_netam_base_path }}/.rbenv/src'
       when:
         - rbenv_clone.changed
-
   become: yes
-  become_user: netam
+  become_user: '{{ v_netam_user }}'
 
 - name: rbenv_install | add rbenv path export into bash_profile
   lineinfile:
@@ -43,24 +43,33 @@
     line: 'eval "$(rbenv init -)"'
     state: present
 
-- block:
-  - name: rbenv_install | stat if ruby already installed
-    stat:
-      path: '{{ v_netam_base_path }}/.rbenv/shims/ruby'
-    register: ruby_installed
+- name: install ruby
+  block:
+    - name: rbenv_install | stat if ruby already installed
+      stat:
+        path: '{{ v_netam_base_path }}/.rbenv/versions/{{ d_ruby_version }}'
+      register: ruby_installed
 
-  - block:
-    - name: rbenv_install | init rbenv
-      shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv init'
-      ignore_errors: True
+    - name: install ruby
+      block:
+        - name: rbenv_install | init rbenv
+          shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv init'
+          ignore_errors: True
 
-    - name: rbenv_install | install ruby {{ d_ruby_version }}
-      shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv install {{ d_ruby_version }}'
+        - name: rbenv_install | install ruby {{ d_ruby_version }}
+          shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv install {{ d_ruby_version }}'
 
-    - name: rbenv_install | set global ruby version to {{ d_ruby_version }} from rbenv
-      shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv global {{ d_ruby_version }}'
-    when: ruby_installed.stat.exists == False
+        - name: rbenv_install | set global ruby version to {{ d_ruby_version }} from rbenv
+          shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv global {{ d_ruby_version }}'
+
+        - name: rbenv_install | set netam user path
+          lineinfile:
+            path: "{{ v_netam_base_path }}/.bashrc"
+            regexp: 'export PATH="\$PATH:.*\/\.rbenv\/shims"'
+            line: 'export PATH="$PATH:{{ v_netam_base_path }}/.rbenv/shims"'
+
+      when: ruby_installed.stat.exists == False
 
   become: yes
-  become_user: netam
+  become_user: '{{ v_netam_user}}'
 

@@ -22,3 +22,7 @@
 - import_tasks: netam_post.yml
   tags:
     - always
+
+- import_tasks: db_migrate.yml
+  tags:
+    - install

@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+cd {{ v_netam_base_path }}/netam
+
+source {{ v_netam_base_path }}/.netam.env
+
+PATH="$PATH:{{ v_netam_base_path }}/.rbenv/shims"
+RAILS_ENV=production
+RACK_ENV=production
+NODE_ENV=production
+{{ v_netam_base_path }}/netam/bin/rake db:migrate

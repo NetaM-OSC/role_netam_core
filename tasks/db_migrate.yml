@@ -1,0 +1,15 @@
+---
+- name: db_migrate | perform db migration
+  shell: |
+    export PATH="$PATH:/opt/netam/.rbenv/shims"
+    source {{ v_netam_base_path }}/.bashrc
+    source {{ v_netam_base_path }}/.netam.env
+    {{ v_netam_base_path }}/netam/bin/rake db:migrate
+  args:
+    chdir: '{{ v_netam_base_path }}/netam'
+  environment:
+    RAILS_ENV: production
+    RACK_ENV: production
+    NODE_ENV: production
+
+# TODO: Fix Database user creation (Bad password inserted)

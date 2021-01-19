@@ -1,0 +1,6 @@
+---
+- name: restart netam
+  service:
+    name: netam
+    state: restarted
+    enabled: yes

@@ -17,6 +17,7 @@
         password: "{{ netam_db_pass }}"
         expires: infinity
         priv: 'ALL'
+        encrypted: no
       tags:
         - always
   become: yes
