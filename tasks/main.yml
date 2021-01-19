@@ -1,9 +1,31 @@
 ---
-- import_tasks: check_os.yml
-- import_tasks: centos_prerequisites.yml
+- name: import check tasks
+  block:
+    - import_tasks: check_os.yml
+    - import_tasks: centos_prerequisites.yml
+  tags:
+    - always
+
 - import_tasks: netam_init.yml
+  tags:
+    - always
+
 - import_tasks: node_install.yml
+  tags:
+    - install
+
 - import_tasks: yarn_install.yml
+  tags:
+    - install
+
 - import_tasks: netam_pre.yml
+  tags:
+    - install
+
 - import_tasks: netam_install.yml
+  tags:
+    - install
+
 - import_tasks: netam_post.yml
+  tags:
+    - always
