@@ -1,24 +1,24 @@
 ---
-- block:
-  - name: db_init | create database
-    postgresql_db:
-      name: "{{ netam_db_name }}"
-      encoding: UTF-8
-      lc_collate: en_US.UTF-8
-      conn_limit: "{{ netam_db_conn_limit }}"
-    tags:
-      - install
+- name: initialize database
+  block:
+    - name: db_init | create database
+      postgresql_db:
+        name: "{{ netam_db_name }}"
+        encoding: UTF-8
+        lc_collate: en_US.UTF-8
+        conn_limit: "{{ netam_db_conn_limit }}"
+      tags:
+        - install
 
-  - name: db_init | create database user
-    postgresql_user:
-      db: "{{ netam_db_name }}"
-      name: "{{ netam_db_user }}"
-      password: "{{ netam_db_pass }}"
-      expires: infinity
-      priv: 'ALL'
-    tags:
-      - always
-
+    - name: db_init | create database user
+      postgresql_user:
+        db: "{{ netam_db_name }}"
+        name: "{{ netam_db_user }}"
+        password: "{{ netam_db_pass }}"
+        expires: infinity
+        priv: 'ALL'
+      tags:
+        - always
   become: yes
   become_user: postgres
 

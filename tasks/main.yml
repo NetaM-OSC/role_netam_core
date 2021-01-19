@@ -10,19 +10,12 @@
   tags:
     - always
 
-- import_tasks: node_install.yml
-  tags:
-    - install
-
-- import_tasks: yarn_install.yml
-  tags:
-    - install
-
-- import_tasks: netam_pre.yml
-  tags:
-    - install
-
-- import_tasks: netam_install.yml
+- name: perform installation
+  block:
+    - import_tasks: node_install.yml
+    - import_tasks: yarn_install.yml
+    - import_tasks: netam_pre.yml
+    - import_tasks: netam_install.yml
   tags:
     - install
 
