@@ -15,7 +15,7 @@
 
 - name: netam_install | deploy base environment file
   copy:
-    src: netam/netam.env.j2
+    src: netam/netam.env
     dest: '{{ v_netam_base_path }}/.netam.env'
     backup: yes
   when:

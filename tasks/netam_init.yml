@@ -16,4 +16,4 @@
     repo: '{{ v_netam_repo_url }}'
     dest: '{{ v_netam_base_path }}/netam'
     update: yes
-    version: '{{ d_netam_version }}'
+    version: '{{ netam_version }}'

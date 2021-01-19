@@ -6,7 +6,7 @@
 
 - name: node_install | download node package {{ d_node_version }}
   get_url:
-    url: '{{ v_node_base_url }}/v{{ d_node_version}}/{{ d_node_artifact }}.tar.xz'
+    url: '{{ v_node_base_url }}/v{{ d_node_version }}/{{ d_node_artifact }}.tar.xz'
     dest: '/tmp/node'
 
 - name: node_install | unarchive node artifact
