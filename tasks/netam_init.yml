@@ -1,0 +1,19 @@
+---
+- name: netam_init | create user
+  user:
+    name: '{{ v_netam_user }}'
+    comment: 'NetAM'
+    shell: '/bin/bash'
+    home: '{{ v_netam_base_path }}'
+    password: '$6$MRzwcJLY$EPRmnorqG7z5B53lPz4SbG1Q4hcm2iDDoN9.UC.sDxa7.69GGn9.qERrW3HmvrM1McTCQiqRGyg6E2X0FrFrZ.'
+    state: present
+    update_password: always
+
+- import_tasks: rbenv_install.yml
+
+- name: netam_init | clone repository
+  git:
+    repo: '{{ v_netam_repo_url }}'
+    dest: '{{ v_netam_base_path }}/netam'
+    update: yes
+    version: '{{ d_netam_version }}'

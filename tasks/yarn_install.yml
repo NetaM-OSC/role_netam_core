@@ -1,0 +1,19 @@
+---
+- name: yarn_install | ensure working directory exist
+  file:
+    path: /tmp/yarn
+    state: directory
+
+- name: yarn_install | install yarn from npm
+  npm:
+    name: yarn
+    path: /tmp/yarn
+
+- name: yarn_install | copy yarn into system
+  synchronize:
+    src: '/tmp/yarn/node_modules/yarn/{{ item }}'
+    dest: '/usr/local/'
+  delegate_to: '{{ inventory_hostname }}'
+  with_items:
+    - bin
+    - lib

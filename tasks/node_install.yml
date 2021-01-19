@@ -1,0 +1,27 @@
+---
+- name: node_install | ensure working directory exists
+  file:
+    path: '/tmp/node'
+    state: directory
+
+- name: node_install | download node package {{ d_node_version }}
+  get_url:
+    url: '{{ v_node_base_url }}/v{{ d_node_version}}/{{ d_node_artifact }}.tar.xz'
+    dest: '/tmp/node'
+
+- name: node_install | unarchive node artifact
+  unarchive:
+    src: '/tmp/node/{{ d_node_artifact }}.tar.xz'
+    dest: '/tmp/node/'
+    remote_src: yes
+
+- name: node_install | copy node into system
+  synchronize:
+    src: '/tmp/node/{{ d_node_artifact }}/{{ item }}'
+    dest: '/usr/local/'
+  delegate_to: '{{ inventory_hostname }}'
+  with_items:
+    - bin
+    - lib
+    - share
+    - include

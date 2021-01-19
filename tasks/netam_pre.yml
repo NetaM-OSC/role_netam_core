@@ -1,0 +1,10 @@
+---
+- name: netam_pre | config gem dependencies
+  shell: "{{ v_netam_base_path }}/.rbenv/shims/bundle config set without 'development test'"
+  args:
+    chdir: '{{ v_netam_base_path }}/netam'
+
+- name: netam_pre | install gem dependencies
+  shell: "{{ v_netam_base_path }}/.rbenv/shims/bundle install --jobs $(nproc) --retry 5"
+  args:
+    chdir: '{{ v_netam_base_path }}/netam'

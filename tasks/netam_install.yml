@@ -1,0 +1,27 @@
+---
+- name: netam_install | ensure required folders exists
+  file:
+    path: '{{ item }}'
+    owner: '{{ v_netam_user }}'
+    group: '{{ v_netam_group }}'
+    state: directory
+  with_items:
+    - '/var/run/netam'
+
+- name: netam_install | stat existing environment file
+  stat:
+    path: '{{ v_netam_base_path }}/.netam.env'
+  register: netam_env_file
+
+- name: netam_install | deploy base environment file
+  copy:
+    src: netam/netam.env.j2
+    dest: '{{ v_netam_base_path }}/.netam.env'
+    backup: yes
+  when:
+    - netam_env_file.stat.exists == false
+
+- name: netam_install | deploy systemd unit
+  template:
+    src: netam/netam.service.j2
+    dest: '/lib/systemd/system/netam.service'

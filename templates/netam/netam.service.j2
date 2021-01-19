@@ -1,0 +1,18 @@
+[Unit]
+Description=Rails Puma server for NetAM
+After=network.target
+
+[Service]
+Type=simple
+User=netam
+WorkingDirectory={{ v_netam_base_path }}/netam
+EnvironmentFile={{ v_netam_base_path }}/.netam.env
+Environment=RAILS_ENV=production
+Environment=RBENV_ROOT={{ v_netam_base_path }}/.rbenv
+Environment=RBENV_VERSION={{ d_ruby_version }}
+Environment=BIND=unix://var/run/netam/puma.sock
+ExecStart={{ v_netam_base_path }}/.rbenv/bin/rbenv exec ruby {{ v_netam_base_path }}/netam/bin/rails server
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,31 @@
+---
+- name: centos_prerequisites | stats dnf
+  stat:
+    path: /usr/bin/dnf
+  register: dnf_binary
+
+- name: centos_prerequisites | install dnf
+  yum:
+    update_cache: yes
+    name: dnf
+    state: present
+  when: dnf_binary.stat.exists
+
+- name: centos_prerequisites | install required packages on centos 7
+  dnf:
+    name:
+      - make
+      - gcc
+      - gcc-c++
+      - bzip2
+      - openssl
+      - openssl-devel
+      - postgresql12-devel
+      - kernel-headers
+      - zlib-devel
+      - tzdata
+      - libpq5-devel
+    state: present
+  when:
+    - ansible_distribution_major_version|int == 7
+    - dnf_binary.stat.exists

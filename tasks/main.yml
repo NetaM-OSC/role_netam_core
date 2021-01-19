@@ -1,0 +1,9 @@
+---
+- import_tasks: check_os.yml
+- import_tasks: centos_prerequisites.yml
+- import_tasks: netam_init.yml
+- import_tasks: node_install.yml
+- import_tasks: yarn_install.yml
+- import_tasks: netam_pre.yml
+- import_tasks: netam_install.yml
+- import_tasks: netam_post.yml

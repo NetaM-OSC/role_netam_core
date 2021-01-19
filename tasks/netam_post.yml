@@ -1,0 +1,7 @@
+---
+- name: netam_post | fix rigths
+  file:
+    path: '{{ v_netam_base_path }}'
+    owner: '{{ v_netam_user }}'
+    group: '{{ v_netam_group }}'
+    recurse: yes

@@ -1,0 +1,7 @@
+---
+v_netam_repo_url: 'https://github.com/NetaM-OSC/NetAM.git'
+v_node_base_url: 'https://nodejs.org/dist'
+
+v_netam_user: 'netam'
+v_netam_group: 'netam'
+v_netam_base_path: '/opt/netam'

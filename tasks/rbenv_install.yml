@@ -1,0 +1,66 @@
+---
+- block:
+    - name: rbenv_install | clone rbenv for netam user
+      git:
+        repo: https://github.com/rbenv/rbenv.git
+        dest: "{{ v_netam_base_path }}/.rbenv"
+        update: yes
+      register: rbenv_clone
+
+    - name: rbenv_install | clone ruby-build plugin
+      git:
+        repo: https://github.com/rbenv/ruby-build.git
+        dest: "{{ v_netam_base_path }}/.rbenv/plugins/ruby-build"
+        update: yes
+
+    - name: rbenv_install | prepare rbenv build
+      shell: ./configure
+      args:
+        chdir: '{{ v_netam_base_path }}/.rbenv/src'
+      when:
+        - rbenv_clone.changed
+
+    - name: rbenv_install | build rbenv
+      make:
+        chdir: '{{ v_netam_base_path }}/.rbenv/src'
+      when:
+        - rbenv_clone.changed
+
+  become: yes
+  become_user: netam
+
+- name: rbenv_install | add rbenv path export into bash_profile
+  lineinfile:
+    path: '{{ v_netam_base_path }}/.bash_profile'
+    regexp: 'export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"'
+    line: 'export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"'
+    state: present
+
+- name: rbenv_install | add rbenv auto stat in bashrc
+  lineinfile:
+    path: '{{ v_netam_base_path }}/.bashrc'
+    regexp: 'eval "$(rbenv init -)"'
+    line: 'eval "$(rbenv init -)"'
+    state: present
+
+- block:
+  - name: rbenv_install | stat if ruby already installed
+    stat:
+      path: '{{ v_netam_base_path }}/.rbenv/shims/ruby'
+    register: ruby_installed
+
+  - block:
+    - name: rbenv_install | init rbenv
+      shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv init'
+      ignore_errors: True
+
+    - name: rbenv_install | install ruby {{ d_ruby_version }}
+      shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv install {{ d_ruby_version }}'
+
+    - name: rbenv_install | set global ruby version to {{ d_ruby_version }} from rbenv
+      shell: '{{ v_netam_base_path }}/.rbenv/bin/rbenv global {{ d_ruby_version }}'
+    when: ruby_installed.stat.exists == False
+
+  become: yes
+  become_user: netam
+
