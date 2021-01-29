@@ -1,4 +1,9 @@
 ---
+# @todo feature: Add configuration management in role
+# @todo feature: Add nginx configuration
+# @todo feature: Perform DB migration for install / update tags
+# @todo feature: Add tags in role (install, configure, update)
+
 - name: import check tasks
   block:
     - import_tasks: check_os.yml

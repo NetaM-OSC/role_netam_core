@@ -1,4 +1,7 @@
 ---
+# @var d_ruby_version: '2.7.2' # Ruby version to use for netam environment
 d_ruby_version: '2.7.2'
+# @var d_node_version: '14.15.4' # Node version to user for netam environment
 d_node_version: '14.15.4'
+# @var d_node_artifact: 'node-v{{ d_node_version }}-linux-x64' # Node artifact name
 d_node_artifact: 'node-v{{ d_node_version }}-linux-x64'
